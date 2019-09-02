@@ -33,8 +33,8 @@ type Tag struct {
 	Name     string     `gorm:"type:varchat(50)", json:"tag", validate:"required"`
 }
 
-//Command 评论
-type Command struct {
+//Comment 评论
+type Comment struct {
 	gorm.Model
 	UserID    uint
 	ArticleID uint
