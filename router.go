@@ -1,13 +1,16 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"github.com/mojiajuzi/forum/action"
 )
 
-func router() *mux.Router {
-	r := mux.NewRouter()
-	r.HandleFunc("/register", action.Register).Methods("POST")
-	r.HandleFunc("/login", action.Login).Methods("POST")
+func app() *gin.Engine {
+	r := gin.Default()
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{"message": "pond"})
+	})
+	r.POST("/register", action.Register)
+	r.POST("/login", action.Login)
 	return r
 }
