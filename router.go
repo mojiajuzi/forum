@@ -12,5 +12,6 @@ func app() *gin.Engine {
 	})
 	r.POST("/register", action.Register)
 	r.POST("/login", action.Login)
+	r.GET("/migrate", action.Migrate)
 	return r
 }

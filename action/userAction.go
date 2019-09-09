@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mojiajuzi/forum/db"
+	"github.com/mojiajuzi/forum/model"
 
 	zhongwen "github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
@@ -27,7 +27,7 @@ func init() {
 
 //Register 用户注册
 func Register(c *gin.Context) {
-	u := db.User{}
+	u := model.User{}
 	c.BindJSON(&u)
 	err := validate.Struct(u)
 	if err != nil {
@@ -37,6 +37,14 @@ func Register(c *gin.Context) {
 		c.JSON(500, resp)
 		return
 	}
+
+	//验证用户是否存在
+
+	//密码加密
+
+	//用户存储
+
+	//发送邮件
 }
 
 //Login 用户登录

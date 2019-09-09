@@ -3,7 +3,7 @@ package action
 import (
 	"strings"
 
-	"github.com/mojiajuzi/forum/db"
+	"github.com/mojiajuzi/forum/model"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -40,7 +40,7 @@ func (f *ForumResp) Error(code int, msg string, err CommonError) {
 type CommonError map[string]interface{}
 
 //NewValidatorError 验证错误处理
-func NewValidatorError(err error, m db.ModelFieldTran) CommonError {
+func NewValidatorError(err error, m model.ModelFieldTran) CommonError {
 	res := CommonError{}
 	errs := err.(validator.ValidationErrors)
 	for _, e := range errs {
