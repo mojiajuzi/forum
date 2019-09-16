@@ -13,6 +13,7 @@ require (
 	github.com/leodido/go-urn v1.1.0 // indirect
 	github.com/tidwall/gjson v1.3.2 // indirect
 	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/dgrijalva/jwt-go.v3 v3.2.0 // indirect
 	gopkg.in/go-playground/validator.v9 v9.29.1
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df

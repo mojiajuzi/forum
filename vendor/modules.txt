@@ -1,3 +1,5 @@
+# github.com/appleboy/gin-jwt v2.5.0+incompatible
+github.com/appleboy/gin-jwt
 # github.com/gin-contrib/sse v0.0.0-20190301062529-5545eab6dad3
 github.com/gin-contrib/sse
 # github.com/gin-gonic/gin v1.4.0
@@ -34,12 +36,21 @@ github.com/modern-go/concurrent
 github.com/modern-go/reflect2
 # github.com/ugorji/go v1.1.4
 github.com/ugorji/go/codec
+# golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
+golang.org/x/crypto/bcrypt
+golang.org/x/crypto/blowfish
 # google.golang.org/appengine v1.4.0
 google.golang.org/appengine/cloudsql
+# gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
+gopkg.in/alexcesaro/quotedprintable.v3
+# gopkg.in/dgrijalva/jwt-go.v3 v3.2.0
+gopkg.in/dgrijalva/jwt-go.v3
 # gopkg.in/go-playground/validator.v8 v8.18.2
 gopkg.in/go-playground/validator.v8
 # gopkg.in/go-playground/validator.v9 v9.29.1
 gopkg.in/go-playground/validator.v9
 gopkg.in/go-playground/validator.v9/translations/zh
+# gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
+gopkg.in/gomail.v2
 # gopkg.in/yaml.v2 v2.2.2
 gopkg.in/yaml.v2

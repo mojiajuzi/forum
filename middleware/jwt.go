@@ -31,20 +31,22 @@ func JwtMiddleware() *jwt.GinJWTMiddleware {
 
 //验证用户是否存在
 func authCallback(c *gin.Context) (interface{}, error) {
-	password := c.PostForm("password")
-	userID := c.PostForm("email")
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 8)
+	db := model.Db()
+	user := model.User{}
+	c.BindJSON(&user)
+	password := []byte(user.Password)
+	record := db.Where("email=?", user.Email).First(&user).RecordNotFound()
+	if record {
+		err := errors.New("用户名错误")
+		return nil, err
+	}
+	hashPassword := []byte(user.Password)
+	err := bcrypt.CompareHashAndPassword(hashPassword, password)
 	if err != nil {
+		err = errors.New("密码错误")
 		return nil, err
 	}
 
-	db := model.Db()
-	user := model.User{}
-	db.Where("email=? AND password=?", userID, hashedPassword).First(&user)
-	if user.Email == "" {
-		err = errors.New("用户名或密码错误")
-		return nil, err
-	}
 	return user, nil
 }
 

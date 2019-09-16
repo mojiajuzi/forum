@@ -60,21 +60,13 @@ func Register(c *gin.Context) {
 	}
 	u.Password = string(hashedPassword)
 	//用户存储
-	res := db.NewRecord(u)
-	if !res {
-		resp.Error(http.StatusInternalServerError, "服务异常", nil)
-		c.JSON(200, resp)
-		return
-	}
+	db.Create(&u)
 	//发送邮件
 	go service.RegisterTemplate(u.Email, u.Name)
-
-	//jwt 返回用户登录信息
-}
-
-//Login 用户登录
-func Login(c *gin.Context) {
-	//TODO 用户登录
+	u.Password = ""
+	resp.Success("注册成功", u)
+	c.JSON(200, resp)
+	return
 }
 
 //User 用户详情
