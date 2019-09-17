@@ -2,42 +2,26 @@ package action
 
 import (
 	"net/http"
+	"strconv"
 
-	"github.com/mojiajuzi/forum/service"
-
-	"golang.org/x/crypto/bcrypt"
+	"github.com/mojiajuzi/forum/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mojiajuzi/forum/model"
-
-	zhongwen "github.com/go-playground/locales/zh"
-	ut "github.com/go-playground/universal-translator"
-	validator "gopkg.in/go-playground/validator.v9"
-	zh_translations "gopkg.in/go-playground/validator.v9/translations/zh"
+	"github.com/mojiajuzi/forum/service"
+	"golang.org/x/crypto/bcrypt"
 )
-
-var (
-	validate *validator.Validate
-	trans    ut.Translator
-)
-
-func init() {
-	zh := zhongwen.New()
-	uni := ut.New(zh, zh)
-	trans, _ = uni.GetTranslator("zh")
-	validate = validator.New()
-	zh_translations.RegisterDefaultTranslations(validate, trans)
-}
 
 //Register 用户注册
 func Register(c *gin.Context) {
 	u := model.User{}
 	c.BindJSON(&u)
+	validate := service.ValidateNew()
 	err := validate.Struct(u)
-	resp := ForumResp{}
+	resp := service.ForumResp{}
 	if err != nil {
-		errors := NewValidatorError(err, u.FieldTrans())
-		resp.Error(http.StatusBadRequest, validateError, errors)
+		errors := service.NewValidatorError(err, service.UserFieldTran())
+		resp.Error(http.StatusBadRequest, service.ValidateError, errors)
 		c.JSON(500, resp)
 		return
 	}
@@ -62,9 +46,19 @@ func Register(c *gin.Context) {
 	//用户存储
 	db.Create(&u)
 	//发送邮件
-	go service.RegisterTemplate(u.Email, u.Name)
-	u.Password = ""
-	resp.Success("注册成功", u)
+	// go service.RegisterTemplate(u.Email, u.Name)
+
+	//加密用户数据
+	j := middleware.JwtMiddleware()
+	uid := strconv.Itoa(int(u.ID))
+	token, expire, err := j.TokenGenerator(uid, u)
+	if err != nil {
+		return
+	}
+	m := make(map[string]interface{})
+	m["expire"] = expire
+	m["token"] = token
+	resp.Success("注册成功", m)
 	c.JSON(200, resp)
 	return
 }

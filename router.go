@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mojiajuzi/forum/action"
 	"github.com/mojiajuzi/forum/middleware"
@@ -18,7 +20,11 @@ func app() *gin.Engine {
 	r.POST("/login", jwt.LoginHandler)
 	auth.Use(jwt.MiddlewareFunc())
 	{
+		auth.Use(middleware.ParseUser())
 		auth.GET("/refresh_token", jwt.RefreshHandler)
+		auth.GET("/hello", func(c *gin.Context) {
+			fmt.Println("hello")
+		})
 	}
 	return r
 }

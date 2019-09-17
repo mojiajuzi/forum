@@ -4,15 +4,17 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/mojiajuzi/forum/config"
+
 	"gopkg.in/gomail.v2"
 )
 
 //EmailHelp 邮箱发送助手
 func EmailHelp() *gomail.Dialer {
-	host := Config("MAIL_HOST", "localhost")
-	p := Config("MAIL_PORT", "2525")
-	user := Config("MAIL_USERNAME", "root")
-	pass := Config("MAIL_PASSWORD", "root")
+	host := config.Config("MAIL_HOST", "localhost")
+	p := config.Config("MAIL_PORT", "2525")
+	user := config.Config("MAIL_USERNAME", "root")
+	pass := config.Config("MAIL_PASSWORD", "root")
 
 	port, _ := strconv.Atoi(p)
 	return gomail.NewDialer(host, port, user, pass)
@@ -22,7 +24,7 @@ func EmailHelp() *gomail.Dialer {
 func RegisterTemplate(email, name string) {
 	help := EmailHelp()
 	m := gomail.NewMessage()
-	user := Config("MAIL_USERNAME", "root")
+	user := config.Config("MAIL_USERNAME", "root")
 	m.SetHeader("From", user)
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "welcome register")

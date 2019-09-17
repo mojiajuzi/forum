@@ -7,8 +7,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	jwt "github.com/appleboy/gin-jwt"
+
 	"github.com/gin-gonic/gin"
-	"github.com/mojiajuzi/forum/action"
+	"github.com/mojiajuzi/forum/config"
 	"github.com/mojiajuzi/forum/model"
 	"github.com/mojiajuzi/forum/service"
 )
@@ -16,16 +17,18 @@ import (
 //JwtMiddleware jwt验证中间件
 func JwtMiddleware() *jwt.GinJWTMiddleware {
 	return &jwt.GinJWTMiddleware{
-		Realm:         "zone name just for test",
-		Key:           []byte(service.Config("JWT_KEY", "helloginjwt")),
-		Timeout:       time.Hour,
-		MaxRefresh:    time.Hour,
-		Authenticator: authCallback,
-		Authorizator:  authPrivCallback,
-		Unauthorized:  unAuthFunc,
-		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
-		TokenHeadName: "Bearer",
-		TimeFunc:      time.Now,
+		Realm:            "forum",
+		Key:              []byte(config.Config("JWT_KEY", "helloginjwt")),
+		Timeout:          time.Hour,
+		MaxRefresh:       time.Hour,
+		Authenticator:    authCallback,
+		Authorizator:     authPrivCallback,
+		Unauthorized:     unAuthFunc,
+		TokenLookup:      "header: Authorization, query: token, cookie: jwt",
+		TokenHeadName:    "Bearer",
+		TimeFunc:         time.Now,
+		SigningAlgorithm: "HS256",
+		PayloadFunc:      payloadFunc,
 	}
 }
 
@@ -46,8 +49,18 @@ func authCallback(c *gin.Context) (interface{}, error) {
 		err = errors.New("密码错误")
 		return nil, err
 	}
-
 	return user, nil
+}
+
+func payloadFunc(data interface{}) jwt.MapClaims {
+	c := jwt.MapClaims{}
+	u, ok := data.(model.User)
+	if ok {
+		c["id"] = u.ID
+		c["email"] = u.Email
+		c["status"] = u.Status
+	}
+	return c
 }
 
 //验证用户权限
@@ -59,7 +72,7 @@ func authPrivCallback(data interface{}, c *gin.Context) bool {
 
 //验证失败信息回调
 func unAuthFunc(c *gin.Context, code int, message string) {
-	resp := action.ForumResp{}
+	resp := service.ForumResp{}
 	resp.Error(code, message, nil)
 	c.JSON(code, resp)
 	return

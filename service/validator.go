@@ -1,15 +1,41 @@
-package action
+package service
 
 import (
 	"strings"
 
-	"github.com/mojiajuzi/forum/model"
+	zhongwen "github.com/go-playground/locales/zh"
+	ut "github.com/go-playground/universal-translator"
 	"gopkg.in/go-playground/validator.v9"
+	zh_translations "gopkg.in/go-playground/validator.v9/translations/zh"
+)
+
+//ValidatorFieldTran 字段验证名称转换
+type ValidatorFieldTran map[string]string
+
+var (
+	validate *validator.Validate
+	trans    ut.Translator
 )
 
 const (
-	validateError = "验证失败"
+	ValidateError = "验证失败"
 )
+
+func init() {
+	zh := zhongwen.New()
+	uni := ut.New(zh, zh)
+	trans, _ = uni.GetTranslator("zh")
+	validate = validator.New()
+	zh_translations.RegisterDefaultTranslations(validate, trans)
+}
+
+//ValidateNew 校验数据
+func ValidateNew() *validator.Validate {
+	return validate
+}
+
+//CommonError 错误
+type CommonError map[string]interface{}
 
 //ForumResp 响应结构体
 type ForumResp struct {
@@ -36,11 +62,8 @@ func (f *ForumResp) Error(code int, msg string, err CommonError) {
 	f.Errors = err
 }
 
-//CommonError 错误
-type CommonError map[string]interface{}
-
 //NewValidatorError 验证错误处理
-func NewValidatorError(err error, m model.ModelFieldTran) CommonError {
+func NewValidatorError(err error, m ValidatorFieldTran) CommonError {
 	res := CommonError{}
 	errs := err.(validator.ValidationErrors)
 	for _, e := range errs {

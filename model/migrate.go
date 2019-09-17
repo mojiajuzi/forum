@@ -3,22 +3,22 @@ package model
 import (
 	"fmt"
 
+	"github.com/mojiajuzi/forum/config"
+
 	"github.com/jinzhu/gorm"
-	"github.com/mojiajuzi/forum/service"
 )
 
 var db *gorm.DB
 
 func init() {
-	fmt.Println("数据库初始化")
-	name := service.Config("DB_USER", "forum")
-	pass := service.Config("DB_PASSWORD", "")
-	host := service.Config("DB_HOST", "localhost")
-	port := service.Config("DB_PORNT", "3306")
-	dnName := service.Config("DB_NAME", "forum")
-	char := service.Config("DB_CHARSET", "forum")
-	parsetTime := service.Config("DB_PARSET_TIME", "forum")
-	loc := service.Config("DB_LOC", "forum")
+	name := config.Config("DB_USER", "forum")
+	pass := config.Config("DB_PASSWORD", "")
+	host := config.Config("DB_HOST", "localhost")
+	port := config.Config("DB_PORNT", "3306")
+	dnName := config.Config("DB_NAME", "forum")
+	char := config.Config("DB_CHARSET", "forum")
+	parsetTime := config.Config("DB_PARSET_TIME", "forum")
+	loc := config.Config("DB_LOC", "forum")
 	connect := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=%s&parseTime=%s&loc=%s", name, pass, host, port, dnName, char, parsetTime, loc)
 	dbConnect, err := gorm.Open("mysql", connect)
 	if err != nil {
