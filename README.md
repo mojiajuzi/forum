@@ -1,12 +1,12 @@
 ## 计划
-- [] user register
-    - email send
-    - form data
-    - data validator
-    - data hash
+- [x] user register
+    - [x] email send
+    - [x] form data
+    - [x] data validator
+    - [x] data hash
+    - [x] jwt
 
-- [] article manager
-    - markdown parse
+- [ ] activity manager
+    - [ ] markdown parse
 
-- [] comments
-    - goroutine
+- [ ] activity message
