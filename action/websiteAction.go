@@ -42,7 +42,6 @@ func WebsiteSave(c *gin.Context) {
 
 	urlOk := <-urlStatus
 	fileOk := <-fileStatus
-	wg.Wait()
 
 	if !urlOk {
 		resp.Error(http.StatusBadRequest, "地址无效", nil)
@@ -55,6 +54,9 @@ func WebsiteSave(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
+
+	wg.Wait()
+
 	//写入数据
 	w := model.Website{}
 	w.Logo = fileOk.path
