@@ -19,7 +19,7 @@ func ParseUser() gin.HandlerFunc {
 		//判断用户当前状态
 		resp := service.ForumResp{}
 		if status, ok := c.Get("status"); ok {
-			if s, ok := status.(int); ok || s == 0 {
+			if s, ok := status.(int); ok && s == 0 {
 				resp.Error(http.StatusForbidden, "账户禁用", nil)
 				c.JSON(403, resp)
 				c.Abort()

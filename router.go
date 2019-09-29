@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	"github.com/mojiajuzi/forum/action"
 	"github.com/mojiajuzi/forum/middleware"
@@ -15,16 +13,22 @@ func app() *gin.Engine {
 	})
 	r.POST("/register", action.Register)
 	r.GET("/migrate", action.Migrate)
+
+	//分组，添加中间件
 	auth := r.Group("/auth")
+	website := r.Group("/website")
 	jwt := middleware.JwtMiddleware()
 	r.POST("/login", jwt.LoginHandler)
 	auth.Use(jwt.MiddlewareFunc())
 	{
-		auth.Use(middleware.ParseUser())
 		auth.GET("/refresh_token", jwt.RefreshHandler)
-		auth.GET("/hello", func(c *gin.Context) {
-			fmt.Println("hello")
-		})
 	}
+
+	//用户认证中间件
+	website.Use(jwt.MiddlewareFunc(), middleware.ParseUser())
+	{
+		website.POST("/", action.WebsiteSave)
+	}
+
 	return r
 }

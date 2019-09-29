@@ -6,6 +6,9 @@
     - [x] data hash
     - [x] jwt
 
+- [ ] website manager
+   - [x] file upload to qiniu
+
 - [ ] activity manager
     - [ ] markdown parse
 

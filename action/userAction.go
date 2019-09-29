@@ -46,7 +46,7 @@ func Register(c *gin.Context) {
 	//用户存储
 	db.Create(&u)
 	//发送邮件
-	// go service.RegisterTemplate(u.Email, u.Name)
+	go service.RegisterTemplate(u.Email, u.Name)
 
 	//加密用户数据
 	j := middleware.JwtMiddleware()
